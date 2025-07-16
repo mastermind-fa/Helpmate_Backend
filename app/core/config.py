@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     # App
     app_name: str = "HelpMate API"
     debug: bool = True
-    base_url: str = "https://helpmate-backend.vercel.app"
+    base_url: str = "https://helpmatebackend-production.up.railway.app"
     
     class Config:
         env_file = ".env"
