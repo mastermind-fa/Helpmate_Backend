@@ -78,9 +78,9 @@ async def create_order(
             AND status IN ('pending', 'accepted', 'in_progress')
             AND scheduled_date IS NOT NULL
             AND (
-                (scheduled_date <= :new_start AND datetime(scheduled_date, '+' || hours || ' hours') > :new_start)
-                OR (scheduled_date < :new_end AND datetime(scheduled_date, '+' || hours || ' hours') >= :new_end)
-                OR (scheduled_date >= :new_start AND datetime(scheduled_date, '+' || hours || ' hours') <= :new_end)
+                (scheduled_date <= :new_start AND scheduled_date + (hours || ' hours')::interval > :new_start)
+                OR (scheduled_date < :new_end AND scheduled_date + (hours || ' hours')::interval >= :new_end)
+                OR (scheduled_date >= :new_start AND scheduled_date + (hours || ' hours')::interval <= :new_end)
             )
         """)
         

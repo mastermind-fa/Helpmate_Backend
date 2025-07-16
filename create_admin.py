@@ -4,31 +4,32 @@ from app.core.security import get_password_hash
 
 def create_admin():
     db = SessionLocal()
-    email = "admin@gmail.com"
-    password = "admin123"
-    hashed_password = get_password_hash(password)
-
-    # Check if admin already exists
-    existing = db.query(User).filter(User.email == email).first()
-    if existing:
-        # Update values using SQLAlchemy ORM setattr
-        setattr(existing, "hashed_password", hashed_password)
-        setattr(existing, "is_admin", True)
+    try:
+        admin_email = "admin@gmail.com"
+        admin_password = "admin123"
+        admin = db.query(User).filter(User.email == admin_email).first()
+        if admin:
+            print("Admin user already exists.")
+            return
+        hashed_password = get_password_hash(admin_password)
+        admin = User(
+            email=admin_email,
+            full_name="Admin",
+            hashed_password=hashed_password,
+            phone_number="",
+            address="",
+            is_active=True,
+            is_verified=True,
+            is_admin=True
+        )
+        db.add(admin)
         db.commit()
-        print("Admin user already exists. Password updated to 'admin123'.")
-        return
-
-    admin_user = User(
-        email=email,
-        full_name="Admin User",
-        hashed_password=hashed_password,
-        is_active=True,
-        is_verified=True,
-        is_admin=True,
-    )
-    db.add(admin_user)
-    db.commit()
-    print("Admin user created!")
+        print("Admin user created successfully.")
+    except Exception as e:
+        print(f"Error creating admin user: {e}")
+        db.rollback()
+    finally:
+        db.close()
 
 if __name__ == "__main__":
     create_admin() 
