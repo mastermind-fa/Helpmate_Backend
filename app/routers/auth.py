@@ -527,6 +527,7 @@ def verify_email(token: str, db: Session = Depends(get_db)):
         user = db.query(User).filter(User.id == record.user_id).first()
         if user:
             user.is_verified = True
+            user.is_active = True
             email_service.mark_verification_token_used(db, record)
             db.commit()
             return {"message": "Email verified successfully. You can now log in."}
@@ -537,6 +538,7 @@ def verify_email(token: str, db: Session = Depends(get_db)):
         worker = db.query(Worker).filter(Worker.id == record.user_id).first()
         if worker:
             worker.is_verified = True
+            worker.is_active = True
             email_service.mark_verification_token_used(db, record)
             db.commit()
             return {"message": "Email verified successfully. You can now log in."}
