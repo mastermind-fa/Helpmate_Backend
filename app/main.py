@@ -1,4 +1,7 @@
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+
+app = FastAPI()
 
 @app.get("/payment/success", response_class=HTMLResponse)
 def payment_success():
